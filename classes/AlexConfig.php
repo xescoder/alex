@@ -3,12 +3,12 @@
 /**
  * Class AlexConfig
  *
- * @property string $dbHost
- * @property string $dbName
- * @property string $dbUser
- * @property string $dbPass
- * @property string $maxTrainingTime
- * @property string $mutate
+ * @property string  $dbHost
+ * @property string  $dbName
+ * @property string  $dbUser
+ * @property string  $dbPass
+ * @property int     $maxTrainingTime
+ * @property Closure $mutate
  */
 class AlexConfig
 {
