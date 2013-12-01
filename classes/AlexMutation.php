@@ -12,13 +12,15 @@ class AlexMutation
 	 */
 	public static function init()
 	{
-		if(is_null(self::$alexMutation)) self::$alexMutation = self();
+		if (is_null(self::$alexMutation)) {
+			self::$alexMutation = self();
+		}
+
 		return self::$alexMutation;
 	}
 
 	private function __construct()
 	{
-
 	}
 
 	/**
