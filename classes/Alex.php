@@ -10,6 +10,11 @@ class Alex
 	/** @var  AlexConfig */
 	private $config;
 
+	public function __construct()
+	{
+		$this->config = new AlexConfig();
+	}
+
 	/**
 	 * @param string  $operationName
 	 * @param array   $args

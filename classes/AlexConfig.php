@@ -7,6 +7,7 @@
  * @property string  $dbName
  * @property string  $dbUser
  * @property string  $dbPass
+ * @property string  $trainingFolder
  * @property int     $maxTrainingTime
  * @property Closure $mutate
  */
@@ -17,9 +18,25 @@ class AlexConfig
 	private $dbUser;
 	private $dbPass;
 
+	private $trainingFolder;
 	private $maxTrainingTime;
 
 	private $mutate;
+
+	public function __construct()
+	{
+		$this->dbHost = 'localhost';
+		$this->dbName = 'alex';
+		$this->dbUser = 'root';
+		$this->dbPass = '';
+
+		$this->trainingFolder  = 'training_room';
+		$this->maxTrainingTime = 1;
+
+		$this->mutate = function ($source) {
+			return $source;
+		};
+	}
 
 	public function __get($property)
 	{
