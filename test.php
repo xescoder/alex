@@ -1,5 +1,7 @@
 <?php
-
 include 'alex.php';
 
-Alex\Internal\DB::test();
+$config = new AlexConfig();
+
+$config->dbUser = 'admin';
+$config->dbPass = 'admin';
