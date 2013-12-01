@@ -3,6 +3,8 @@ namespace Alex\Internal;
 
 /**
  * Class DB
+ *
+ * @package Alex\Internal
  */
 class DB
 {
