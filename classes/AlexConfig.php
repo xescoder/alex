@@ -34,7 +34,7 @@ class AlexConfig
 		$this->maxTrainingTime = 1;
 
 		$this->mutate = function ($source) {
-			return $source;
+			return AlexMutation::init()->mutate($source);
 		};
 	}
 
