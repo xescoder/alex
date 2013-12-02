@@ -1,9 +1,9 @@
 <?php
 
-define('DB_HOST', 'localhost');
+define('DB_HOST', '127.0.0.1');
 define('DB_NAME', 'alex');
-define('DB_USER', 'admin');
-define('DB_PASS', 'admin');
+define('DB_USER', 'root');
+define('DB_PASS', '');
 
 define('TABLE_NAME', 'training_result');
 

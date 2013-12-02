@@ -26,7 +26,7 @@ class AlexConfig
 
 	public function __construct()
 	{
-		$this->dbHost = 'localhost';
+		$this->dbHost = '127.0.0.1';
 		$this->dbName = 'alex';
 		$this->dbUser = 'root';
 		$this->dbPass = '';

@@ -27,7 +27,7 @@ class Equipment
 
 	public function save()
 	{
-		$code = file_get_contents(__DIR__ . '/../../templates/equipment.php');
+		$code = file_get_contents(__DIR__ . '/../../templates/equipment.tpl');
 
 		$code = str_replace('{$dbHost}', $this->dbHost, $code);
 		$code = str_replace('{$dbName}', $this->dbName, $code);
