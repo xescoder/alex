@@ -15,6 +15,8 @@ define('TABLE_NAME', 'training_result');
  */
 function execute($function, $args, $folder, $functionName)
 {
+    $args = unserialize($args);
+
 	$result = $function($args);
 	$result = serialize($result);
 
