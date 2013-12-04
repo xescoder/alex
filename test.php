@@ -1,18 +1,9 @@
 <?php
 include 'alex.php';
 
-use \Alex\Internal\Trainee;
+use \Alex\Internal\Trainer;
 
 $config = new AlexConfig();
+$trainer = new Trainer($config);
 
-// first
-$trainee = new Trainee('first', null);
-$trainee->create();
-$trainee->train($config->trainingFolder);
-
-// inherit
-$trainee = new Trainee('inherit', null);
-$trainee->inherit($config->trainingFolder . '/123', $config->mutate);
-$trainee->train($config->trainingFolder);
-
-$args = unserialize($args);
+$trainer->prepareTrainingRoom();

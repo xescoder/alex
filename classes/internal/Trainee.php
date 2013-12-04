@@ -77,7 +77,7 @@ class Trainee
 		$f = fopen($trainee, 'w');
 		fwrite($f, $traineeCode);
 		fclose($f);
-		
+
 		// Execute trainee
 		$cmd = 'php -f ' . $trainee . ' /dev/null &';
 		pclose(popen($cmd, 'r'));

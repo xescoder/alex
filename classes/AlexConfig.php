@@ -9,6 +9,7 @@ use Alex\Internal\Equipment;
  * @property string  $dbUser
  * @property string  $dbPass
  * @property string  $trainingFolder
+ * @property int     $trainingCycles
  * @property int     $maxTrainingTime
  * @property Closure $mutate
  */
@@ -20,6 +21,7 @@ class AlexConfig
 	private $dbPass;
 
 	private $trainingFolder;
+	private $trainingCycles;
 	private $maxTrainingTime;
 
 	private $mutate;
@@ -32,26 +34,12 @@ class AlexConfig
 		$this->dbPass = '';
 
 		$this->trainingFolder  = __DIR__ . '/../training_room';
+		$this->trainingCycles  = 1000;
 		$this->maxTrainingTime = 1;
 
 		$this->mutate = function ($source) {
 			return AlexMutation::init()->mutate($source);
 		};
-
-		$this->save();
-	}
-
-	private function save()
-	{
-		$equipment = new Equipment(
-			$this->dbHost,
-			$this->dbName,
-			$this->dbUser,
-			$this->dbPass,
-			$this->trainingFolder
-		);
-
-		$equipment->save();
 	}
 
 	public function __get($property)
@@ -67,7 +55,6 @@ class AlexConfig
 		$props = get_object_vars($this);
 		if (array_key_exists($property, $props)) {
 			$this->{$property} = $value;
-			$this->save();
 		}
 	}
 } 
