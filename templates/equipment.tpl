@@ -8,12 +8,12 @@ define('DB_PASS', '{$dbPass}');
 define('TABLE_NAME', 'training_result');
 
 /**
+ * @param string $functionName
+ * @param string $args
  * @param Closure $function
- * @param mixed   $args
- * @param string  $folder
- * @param string  $functionName
+ * @param string $folder
  */
-function execute($function, $args, $folder, $functionName)
+function execute($functionName, $args, $function, $folder)
 {
     $args = unserialize($args);
 

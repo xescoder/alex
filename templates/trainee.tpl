@@ -1,6 +1,6 @@
 <?php
 include __DIR__ . '/../equipment.php';
 
-execute(function($args){
+execute('{$functionName}', '{$args}', function($args){
 	return include 'body.php';
-}, '{$args}', __DIR__, '{$functionName}');
+}, __DIR__);
