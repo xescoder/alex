@@ -84,6 +84,38 @@ class Trainer
 		$equipment->save();
 	}
 
+	/**
+	 * @param string $estimate
+	 *
+	 * @return array
+	 */
+	public function getResults($estimate)
+	{
+		$tableName = 'training_result';
+
+		$db    = new \PDO(
+			'mysql:host=' . $this->config->dbHost . ';dbname=' . $this->config->dbName,
+			$this->config->dbUser,
+			$this->config->dbPass
+		);
+
+		$query = 'SELECT * FROM `' . $tableName . '`;';
+
+		$cursor = $db->query($query);
+		$cursor->setFetchMode(PDO::FETCH_ASSOC);
+
+		$result = [];
+		while ($row = $cursor->fetch()) {
+			$res = unserialize($row['result']);
+			$res = $estimate($res);
+			$result[$res] = $row['folder'];
+		}
+
+		krsort($result);
+
+		return $result;
+	}
+
 	public function __get($property)
 	{
 		switch ($property) {
