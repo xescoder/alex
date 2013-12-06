@@ -160,6 +160,38 @@ class Trainer
 		return $result;
 	}
 
+	public function train($operationName, $args, $estimate)
+	{
+		$first     = true;
+		$max_count = 10;
+		$best      = [];
+
+		for ($i = 0; $i < $this->config->trainingCycles; $i++) {
+			$this->prepareTrainingRoom();
+
+			for ($j = 0; $j < $max_count; $j++) {
+				$trainee = new Trainee($operationName, $args);
+				if ($first) {
+					for ($k = 0; $k < 5; $k++) {
+						$trainee->create();
+					}
+				} else {
+					for ($k = 0; $k < 5; $k++) {
+						$trainee->inherit($best[j], $estimate);
+					}
+				}
+				$trainee->train($this->config->trainingFolder);
+			}
+
+			sleep($this->config->maxTrainingTime);
+
+			$result = $this->getResults($estimate);
+			$result = $this->roulette($result, $max_count);
+
+			$best   = $this->copyInBest($result);
+		}
+	}
+
 	public function __get($property)
 	{
 		switch ($property) {

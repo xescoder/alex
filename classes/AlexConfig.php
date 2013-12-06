@@ -37,7 +37,7 @@ class AlexConfig
 
 		$this->bestFolder      = __DIR__ . '/../best';
 		$this->trainingFolder  = __DIR__ . '/../training_room';
-		$this->trainingCycles  = 1000;
+		$this->trainingCycles  = 120;
 		$this->maxTrainingTime = 1;
 
 		$this->mutate = function ($source) {

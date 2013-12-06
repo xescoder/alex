@@ -37,12 +37,12 @@ class Trainee
 	}
 
 	/**
-	 * @param string $parentFolder
+	 * @param string $parentBody
 	 * @param string $mutate
 	 */
-	public function inherit($parentFolder, $mutate)
+	public function inherit($parentBody, $mutate)
 	{
-		$this->body = self::getBody($parentFolder);
+		$this->body = file_get_contents($parentBody);
 		$this->body = $mutate($this->body);
 	}
 
