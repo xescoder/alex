@@ -116,6 +116,34 @@ class Trainer
 		return $result;
 	}
 
+	public function roulette($trainees, $max_count)
+	{
+		$sum = 0;
+		foreach ($trainees as $est => $folder) {
+			$sum += $est;
+		}
+
+		$next = 0;
+		$arr  = [];
+		foreach ($trainees as $est => $folder) {
+			$next += ($est / $sum) * 1000;
+			$arr[$next] = $folder;
+		}
+
+		$result = [];
+		for ($i = 0; $i < $max_count; $i++) {
+			$rand = rand(0, 1000);
+			foreach ($arr as $max => $folder) {
+				if ($max > $rand) {
+					$result[] = $folder;
+					break;
+				}
+			}
+		}
+
+		return $result;
+	}
+
 	public function __get($property)
 	{
 		switch ($property) {
