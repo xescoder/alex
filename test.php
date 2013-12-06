@@ -21,14 +21,20 @@ $trainer = new Trainer($config);
 //	return $res * $res;
 //}));
 
-$result = [
-	0 => 0,
-	2 => 2,
-	5 => 5,
-	6 => 6,
-	7 => 7,
-	15 => 15,
-	9 => 9,
-];
+//$result = [
+//	0 => 0,
+//	2 => 2,
+//	5 => 5,
+//	6 => 6,
+//	7 => 7,
+//	15 => 15,
+//	9 => 9,
+//];
+//
+//var_dump($trainer->roulette($result, 5));
 
-var_dump($trainer->roulette($result, 5));
+$trainees = $trainer->getResults(function($res){
+	return $res;
+});
+
+$trainer->copyInBest($trainees);

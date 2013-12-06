@@ -68,6 +68,22 @@ class Trainer
 		$this->deleteDir($this->config->trainingFolder, false);
 	}
 
+	public function copyInBest($trainees)
+	{
+		$this->deleteDir($this->config->bestFolder, false);
+
+		$number = 1;
+		$result = [];
+		foreach ($trainees as $traineeFolder) {
+			$path = $this->config->bestFolder . '/' . $number . '.php';
+			copy($traineeFolder . '/body.php', $path);
+			$result[] = $path;
+			$number++;
+		}
+
+		return $result;
+	}
+
 	public function prepareTrainingRoom()
 	{
 		$this->clearResults();

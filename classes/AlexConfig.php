@@ -8,6 +8,7 @@ use Alex\Internal\Equipment;
  * @property string  $dbName
  * @property string  $dbUser
  * @property string  $dbPass
+ * @property string  $bestFolder
  * @property string  $trainingFolder
  * @property int     $trainingCycles
  * @property int     $maxTrainingTime
@@ -20,6 +21,7 @@ class AlexConfig
 	private $dbUser;
 	private $dbPass;
 
+	private $bestFolder;
 	private $trainingFolder;
 	private $trainingCycles;
 	private $maxTrainingTime;
@@ -33,6 +35,7 @@ class AlexConfig
 		$this->dbUser = 'root';
 		$this->dbPass = '';
 
+		$this->bestFolder      = __DIR__ . '/../best';
 		$this->trainingFolder  = __DIR__ . '/../training_room';
 		$this->trainingCycles  = 1000;
 		$this->maxTrainingTime = 1;
