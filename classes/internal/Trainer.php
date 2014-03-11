@@ -92,7 +92,7 @@ class Trainer
 
 		$number = 1;
 		$result = [];
-		foreach ($trainees as $traineeFolder) {
+		foreach ($trainees as $traineeFolder => $est) {
 			$path = $this->config->bestFolder . '/' . $number . '.php';
 			copy($traineeFolder . '/body.php', $path);
 			$result[] = $path;
