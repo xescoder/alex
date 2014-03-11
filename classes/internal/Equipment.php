@@ -2,6 +2,8 @@
 
 namespace Alex\Internal;
 
+use \AlexConfig;
+
 /**
  * Class Equipment
  *
@@ -9,33 +11,29 @@ namespace Alex\Internal;
  */
 class Equipment
 {
-	private $dbHost;
-	private $dbName;
-	private $dbUser;
-	private $dbPass;
+	/** @var AlexConfig */
+	private $config;
 
-	private $trainingFolder;
-
-	public function __construct($dbHost, $dbName, $dbUser, $dbPass, $trainingFolder)
+	/**
+	 * @param AlexConfig $config
+	 */
+	public function __construct($config)
 	{
-		$this->dbHost = $dbHost;
-		$this->dbName = $dbName;
-		$this->dbUser = $dbUser;
-		$this->dbPass = $dbPass;
-
-		$this->trainingFolder = $trainingFolder;
+		$this->config = $config;
 	}
 
 	public function save()
 	{
 		$code = file_get_contents(__DIR__ . '/../../templates/equipment.tpl');
 
-		$code = str_replace('{$dbHost}', $this->dbHost, $code);
-		$code = str_replace('{$dbName}', $this->dbName, $code);
-		$code = str_replace('{$dbUser}', $this->dbUser, $code);
-		$code = str_replace('{$dbPass}', $this->dbPass, $code);
+		$code = str_replace('{$dbHost}', $this->config->dbHost, $code);
+		$code = str_replace('{$dbName}', $this->config->dbName, $code);
+		$code = str_replace('{$dbUser}', $this->config->dbUser, $code);
+		$code = str_replace('{$dbPass}', $this->config->dbPass, $code);
 
-		$f = fopen($this->trainingFolder . '/equipment.php', 'w');
+		$code = str_replace('{$trainingResultTable}', $this->config->trainingResultTable, $code);
+
+		$f = fopen($this->config->trainingFolder . '/equipment.php', 'w');
 		fwrite($f, $code);
 		fclose($f);
 	}

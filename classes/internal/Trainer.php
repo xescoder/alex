@@ -3,6 +3,7 @@
 namespace Alex\Internal;
 
 use \PDO,
+	\Closure,
 	\AlexConfig;
 
 /**
@@ -26,14 +27,6 @@ class Trainer
 	}
 
 	/**
-	 * @return string
-	 */
-	private function getTrainingResultTableName()
-	{
-		return 'training_result';
-	}
-
-	/**
 	 * @return PDO
 	 */
 	private function getPDO()
@@ -49,8 +42,17 @@ class Trainer
 
 	private function clearResults()
 	{
+		$table = $this->config->trainingResultTable;
 		$pdo   = $this->getPDO();
-		$query = 'DELETE FROM `' . $this->getTrainingResultTableName() . '`;';
+
+		$query = 'DROP TABLE IF EXISTS `' . $table . '`;';
+		$pdo->query($query);
+
+		$query = "CREATE TABLE `" . $table . "` (
+				  `folder` char(255) NOT NULL DEFAULT '',
+				  `function` char(100) NOT NULL DEFAULT '',
+				  `result` varchar(100) NOT NULL DEFAULT ''
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 		$pdo->query($query);
 	}
 
@@ -106,28 +108,21 @@ class Trainer
 		$this->clearResults();
 		$this->clearTrainingRoom();
 
-		$equipment = new Equipment(
-			$this->config->dbHost,
-			$this->config->dbName,
-			$this->config->dbUser,
-			$this->config->dbPass,
-			$this->config->trainingFolder
-		);
-
+		$equipment = new Equipment($this->config);
 		$equipment->save();
 	}
 
 	/**
-	 * @param string $estimate
+	 * @param callable $estimate
 	 *
 	 * @return array
 	 */
-	public function getResults($estimate)
+	public function getResults(Closure $estimate)
 	{
-		$tableName = $this->getTrainingResultTableName();
-		$pdo       = $this->getPDO();
+		$table = $this->config->trainingResultTable;
+		$pdo   = $this->getPDO();
 
-		$query = 'SELECT * FROM `' . $tableName . '`;';
+		$query = 'SELECT * FROM `' . $table . '`;';
 
 		$cursor = $pdo->query($query);
 		$cursor->setFetchMode(PDO::FETCH_ASSOC);
@@ -172,7 +167,12 @@ class Trainer
 		return $result;
 	}
 
-	public function train($operationName, $args, $estimate)
+	/**
+	 * @param string   $operationName
+	 * @param mixed    $args
+	 * @param callable $estimate
+	 */
+	public function train($operationName, $args, Closure $estimate)
 	{
 		$first     = TRUE;
 		$max_count = 10;

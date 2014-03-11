@@ -33,7 +33,7 @@ class Trainee
 	 */
 	public function create()
 	{
-		$template   = __DIR__ . '/../../templates/adam.tpl';
+		$template   = __DIR__ . '/../../templates/body.tpl';
 		$this->body = file_get_contents($template);
 	}
 

@@ -3,15 +3,19 @@
 /**
  * Class AlexConfig
  *
- * @property string  $dbHost
- * @property string  $dbName
- * @property string  $dbUser
- * @property string  $dbPass
- * @property string  $bestFolder
- * @property string  $trainingFolder
- * @property int     $trainingCycles
- * @property int     $maxTrainingTime
- * @property Closure $mutate
+ * @property string   $dbHost
+ * @property string   $dbName
+ * @property string   $dbUser
+ * @property string   $dbPass
+ *
+ * @property string   $trainingResultTable
+ *
+ * @property string   $bestFolder
+ * @property string   $trainingFolder
+ * @property int      $trainingCycles
+ * @property int      $maxTrainingTime
+ *
+ * @property callable $mutate
  */
 class AlexConfig
 {
@@ -19,6 +23,8 @@ class AlexConfig
 	private $dbName;
 	private $dbUser;
 	private $dbPass;
+
+	private $trainingResultTable;
 
 	private $bestFolder;
 	private $trainingFolder;
@@ -33,6 +39,8 @@ class AlexConfig
 		$this->dbName = 'alex';
 		$this->dbUser = 'root';
 		$this->dbPass = '';
+
+		$this->trainingResultTable = 'training_result';
 
 		$this->bestFolder      = __DIR__ . '/../best';
 		$this->trainingFolder  = __DIR__ . '/../training_room';

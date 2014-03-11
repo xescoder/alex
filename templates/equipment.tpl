@@ -5,7 +5,7 @@ define('DB_NAME', '{$dbName}');
 define('DB_USER', '{$dbUser}');
 define('DB_PASS', '{$dbPass}');
 
-define('TABLE_NAME', 'training_result');
+define('TABLE_NAME', '{$trainingResultTable}');
 
 /**
  * @param string $functionName
