@@ -1,4 +1,5 @@
 <?php
+
 namespace Alex\Internal;
 
 /**
@@ -53,10 +54,10 @@ class Trainee
 	{
 		// Make new folder in training room
 		$folder = '';
-		for ($i = 0; $i < 1000000; $i++) {
+		for ($i = 0; $i < 1000000; $i ++) {
 			$name   = rand(0, 10000000000000);
 			$folder = $trainingRoom . '/' . $name;
-			if (!is_dir($folder)) {
+			if (! is_dir($folder)) {
 				break;
 			}
 		}

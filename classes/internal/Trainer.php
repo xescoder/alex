@@ -1,7 +1,9 @@
 <?php
+
 namespace Alex\Internal;
 
-use \PDO, \AlexConfig;
+use \PDO,
+	\AlexConfig;
 
 /**
  * Class Trainer
@@ -23,23 +25,38 @@ class Trainer
 		$this->config = $config;
 	}
 
-	private function clearResults()
+	/**
+	 * @return string
+	 */
+	private function getTrainingResultTableName()
 	{
-		$tableName = 'training_result';
+		return 'training_result';
+	}
 
-		$db    = new \PDO(
+	/**
+	 * @return PDO
+	 */
+	private function getPDO()
+	{
+		$pdo = new \PDO(
 			'mysql:host=' . $this->config->dbHost . ';dbname=' . $this->config->dbName,
 			$this->config->dbUser,
 			$this->config->dbPass
 		);
 
-		$query = 'DELETE FROM `' . $tableName . '`;';
-		$db->query($query);
+		return $pdo;
 	}
 
-	private function deleteDir($dir, $withRoot = true)
+	private function clearResults()
 	{
-		if (!is_dir($dir) || is_link($dir)) {
+		$pdo   = $this->getPDO();
+		$query = 'DELETE FROM `' . $this->getTrainingResultTableName() . '`;';
+		$pdo->query($query);
+	}
+
+	private function deleteDir($dir, $withRoot = TRUE)
+	{
+		if (! is_dir($dir) || is_link($dir)) {
 			return unlink($dir);
 		}
 
@@ -48,10 +65,10 @@ class Trainer
 				continue;
 			}
 
-			if (!$this->deleteDir($dir . '/' . $file)) {
+			if (! $this->deleteDir($dir . '/' . $file)) {
 				chmod($dir . '/' . $file, 0777);
-				if (!$this->deleteDir($dir . '/' . $file)) {
-					return false;
+				if (! $this->deleteDir($dir . '/' . $file)) {
+					return FALSE;
 				}
 			};
 		}
@@ -60,17 +77,17 @@ class Trainer
 			return rmdir($dir);
 		}
 
-		return true;
+		return TRUE;
 	}
 
 	private function clearTrainingRoom()
 	{
-		$this->deleteDir($this->config->trainingFolder, false);
+		$this->deleteDir($this->config->trainingFolder, FALSE);
 	}
 
 	public function copyInBest($trainees)
 	{
-		$this->deleteDir($this->config->bestFolder, false);
+		$this->deleteDir($this->config->bestFolder, FALSE);
 
 		$number = 1;
 		$result = [];
@@ -78,7 +95,7 @@ class Trainer
 			$path = $this->config->bestFolder . '/' . $number . '.php';
 			copy($traineeFolder . '/body.php', $path);
 			$result[] = $path;
-			$number++;
+			$number ++;
 		}
 
 		return $result;
@@ -107,23 +124,18 @@ class Trainer
 	 */
 	public function getResults($estimate)
 	{
-		$tableName = 'training_result';
-
-		$db    = new \PDO(
-			'mysql:host=' . $this->config->dbHost . ';dbname=' . $this->config->dbName,
-			$this->config->dbUser,
-			$this->config->dbPass
-		);
+		$tableName = $this->getTrainingResultTableName();
+		$pdo       = $this->getPDO();
 
 		$query = 'SELECT * FROM `' . $tableName . '`;';
 
-		$cursor = $db->query($query);
+		$cursor = $pdo->query($query);
 		$cursor->setFetchMode(PDO::FETCH_ASSOC);
 
 		$result = [];
 		while ($row = $cursor->fetch()) {
-			$res = unserialize($row['result']);
-			$res = $estimate($res);
+			$res          = unserialize($row['result']);
+			$res          = $estimate($res);
 			$result[$res] = $row['folder'];
 		}
 
@@ -147,7 +159,7 @@ class Trainer
 		}
 
 		$result = [];
-		for ($i = 0; $i < $max_count; $i++) {
+		for ($i = 0; $i < $max_count; $i ++) {
 			$rand = rand(0, 1000);
 			foreach ($arr as $max => $folder) {
 				if ($max > $rand) {
@@ -162,22 +174,23 @@ class Trainer
 
 	public function train($operationName, $args, $estimate)
 	{
-		$first     = true;
+		$first     = TRUE;
 		$max_count = 10;
 		$best      = [];
 
-		for ($i = 0; $i < $this->config->trainingCycles; $i++) {
+		for ($i = 0; $i < $this->config->trainingCycles; $i ++) {
 			$this->prepareTrainingRoom();
 
-			for ($j = 0; $j < $max_count; $j++) {
+			for ($j = 0; $j < $max_count; $j ++) {
 				$trainee = new Trainee($operationName, $args);
 				if ($first) {
-					for ($k = 0; $k < 5; $k++) {
+					for ($k = 0; $k < 5; $k ++) {
 						$trainee->create();
 					}
-				} else {
-					for ($k = 0; $k < 5; $k++) {
-						$trainee->inherit($best[j], $estimate);
+				}
+				else {
+					for ($k = 0; $k < 5; $k ++) {
+						$trainee->inherit($best[$j], $estimate);
 					}
 				}
 				$trainee->train($this->config->trainingFolder);
@@ -188,7 +201,7 @@ class Trainer
 			$result = $this->getResults($estimate);
 			$result = $this->roulette($result, $max_count);
 
-			$best   = $this->copyInBest($result);
+			$best = $this->copyInBest($result);
 		}
 	}
 

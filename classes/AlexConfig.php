@@ -1,5 +1,4 @@
 <?php
-use Alex\Internal\Equipment;
 
 /**
  * Class AlexConfig
