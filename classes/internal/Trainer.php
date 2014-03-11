@@ -50,7 +50,6 @@ class Trainer
 
 		$query = "CREATE TABLE `" . $table . "` (
 				  `folder` char(255) NOT NULL DEFAULT '',
-				  `function` char(100) NOT NULL DEFAULT '',
 				  `result` varchar(100) NOT NULL DEFAULT ''
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 		$pdo->query($query);
@@ -129,12 +128,13 @@ class Trainer
 
 		$result = [];
 		while ($row = $cursor->fetch()) {
-			$res          = unserialize($row['result']);
-			$res          = $estimate($res);
-			$result[$res] = $row['folder'];
+			$res = unserialize($row['result']);
+			$res = $estimate($res);
+
+			$result[$row['folder']] = $res;
 		}
 
-		krsort($result);
+		arsort($result);
 
 		return $result;
 	}
@@ -182,7 +182,7 @@ class Trainer
 			$this->prepareTrainingRoom();
 
 			for ($j = 0; $j < $max_count; $j ++) {
-				$trainee = new Trainee($operationName, $args);
+				$trainee = new Trainee($args);
 				if ($first) {
 					for ($k = 0; $k < 5; $k ++) {
 						$trainee->create();

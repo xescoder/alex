@@ -9,9 +9,6 @@ namespace Alex\Internal;
  */
 class Trainee
 {
-	/** @var  string */
-	private $functionName;
-
 	/** @var  mixed */
 	private $args;
 
@@ -19,12 +16,10 @@ class Trainee
 	private $body;
 
 	/**
-	 * @param string $functionName
 	 * @param mixed  $args
 	 */
-	public function __construct($functionName, $args)
+	public function __construct($args)
 	{
-		$this->functionName = $functionName;
 		$this->args         = $args;
 	}
 
@@ -72,7 +67,6 @@ class Trainee
 		// Save trainee
 		$trainee     = $folder . '/trainee.php';
 		$traineeCode = file_get_contents(__DIR__ . '/../../templates/trainee.tpl');
-		$traineeCode = str_replace('{$functionName}', $this->functionName, $traineeCode);
 		$traineeCode = str_replace('{$args}', serialize($this->args), $traineeCode);
 
 		$f = fopen($trainee, 'w');

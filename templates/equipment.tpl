@@ -13,7 +13,7 @@ define('TABLE_NAME', '{$trainingResultTable}');
  * @param Closure $function
  * @param string $folder
  */
-function execute($functionName, $args, $function, $folder)
+function execute($args, $function, $folder)
 {
     $args = unserialize($args);
 
@@ -22,8 +22,8 @@ function execute($functionName, $args, $function, $folder)
 
 	try {
 		$db = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS);
-		$query =  "INSERT INTO `" . TABLE_NAME . "` (`folder`, `function`, `result`)
-        VALUES ('$folder', '$functionName', '$result');";
+		$query =  "INSERT INTO `" . TABLE_NAME . "` (`folder`, `result`)
+        VALUES ('$folder', '$result');";
 		$db->query($query);
 	} catch (Exception $e) {
 		die();

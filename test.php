@@ -7,19 +7,19 @@ use \Alex\Internal\Trainer,
 $config = new AlexConfig();
 $trainer = new Trainer($config);
 
-//$trainer->prepareTrainingRoom();
-//
-//for($i = 0; $i < 10; $i++) {
-//	$trainee = new Trainee('test', $i);
-//	$trainee->create();
-//	$trainee->train($config->trainingFolder);
-//}
-//
-//sleep(5);
-//
-//var_dump($trainer->getResults(function($res){
-//	return $res * $res;
-//}));
+$trainer->prepareTrainingRoom();
+
+for($i = 0; $i < 10; $i++) {
+	$trainee = new Trainee($i);
+	$trainee->create();
+	$trainee->train($config->trainingFolder);
+}
+
+sleep(5);
+
+var_dump($trainer->getResults(function($res){
+	return $res * $res;
+}));
 
 //$result = [
 //	0 => 0,
@@ -33,8 +33,8 @@ $trainer = new Trainer($config);
 //
 //var_dump($trainer->roulette($result, 5));
 
-$trainees = $trainer->getResults(function($res){
-	return $res;
-});
-
-$trainer->copyInBest($trainees);
+//$trainees = $trainer->getResults(function($res){
+//	return $res;
+//});
+//
+//$trainer->copyInBest($trainees);
