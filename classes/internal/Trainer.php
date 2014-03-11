@@ -142,21 +142,21 @@ class Trainer
 	public function roulette($trainees, $max_count)
 	{
 		$sum = 0;
-		foreach ($trainees as $est => $folder) {
+		foreach ($trainees as $est) {
 			$sum += $est;
 		}
 
 		$next = 0;
 		$arr  = [];
-		foreach ($trainees as $est => $folder) {
+		foreach ($trainees as $folder => $est) {
 			$next += ($est / $sum) * 1000;
-			$arr[$next] = $folder;
+			$arr[$folder] = $next;
 		}
 
 		$result = [];
 		for ($i = 0; $i < $max_count; $i ++) {
 			$rand = rand(0, 1000);
-			foreach ($arr as $max => $folder) {
+			foreach ($arr as $folder => $max) {
 				if ($max > $rand) {
 					$result[] = $folder;
 					break;
