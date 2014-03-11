@@ -12,6 +12,9 @@
  *
  * @property string   $bestFolder
  * @property string   $trainingFolder
+ * @property int      $countInBestFolder
+ * @property int      $countInTrainingFolder
+ *
  * @property int      $trainingCycles
  * @property int      $maxTrainingTime
  *
@@ -28,6 +31,9 @@ class AlexConfig
 
 	private $bestFolder;
 	private $trainingFolder;
+	private $countInBestFolder;
+	private $countInTrainingFolder;
+
 	private $trainingCycles;
 	private $maxTrainingTime;
 
@@ -42,9 +48,12 @@ class AlexConfig
 
 		$this->trainingResultTable = 'training_result';
 
-		$this->bestFolder      = __DIR__ . '/../best';
-		$this->trainingFolder  = __DIR__ . '/../training_room';
-		$this->trainingCycles  = 120;
+		$this->bestFolder            = __DIR__ . '/../best';
+		$this->trainingFolder        = __DIR__ . '/../training_room';
+		$this->countInBestFolder     = 10;
+		$this->countInTrainingFolder = 50;
+
+		$this->trainingCycles  = 10;
 		$this->maxTrainingTime = 1;
 
 		$this->mutate = function ($source) {

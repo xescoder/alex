@@ -2,6 +2,8 @@
 
 namespace Alex\Internal;
 
+use \Closure;
+
 /**
  * Class Trainee
  *
@@ -16,17 +18,18 @@ class Trainee
 	private $body;
 
 	/**
-	 * @param mixed  $args
+	 * @param mixed $args
 	 */
 	public function __construct($args)
 	{
-		$this->args         = $args;
+		$this->args = $args;
+		$this->create();
 	}
 
 	/**
 	 * Create first
 	 */
-	public function create()
+	private function create()
 	{
 		$template   = __DIR__ . '/../../templates/body.tpl';
 		$this->body = file_get_contents($template);
@@ -34,18 +37,17 @@ class Trainee
 
 	/**
 	 * @param string $parentBody
-	 * @param string $mutate
 	 */
-	public function inherit($parentBody, $mutate)
+	public function inherit($parentBody)
 	{
 		$this->body = file_get_contents($parentBody);
-		$this->body = $mutate($this->body);
 	}
 
 	/**
-	 * @param string $trainingRoom
+	 * @param string   $trainingRoom
+	 * @param callable $mutation
 	 */
-	public function train($trainingRoom)
+	public function train($trainingRoom, Closure $mutation)
 	{
 		// Make new folder in training room
 		$folder = '';
@@ -61,7 +63,7 @@ class Trainee
 
 		// Save body
 		$f = fopen($folder . '/body.php', 'w');
-		fwrite($f, $this->body);
+		fwrite($f, $mutation($this->body));
 		fclose($f);
 
 		// Save trainee
@@ -76,16 +78,5 @@ class Trainee
 		// Execute trainee
 		$cmd = 'php -f ' . $trainee . ' /dev/null &';
 		pclose(popen($cmd, 'r'));
-	}
-
-	/**
-	 * @param string $folder
-	 *
-	 * @return string
-	 */
-	public static function getBody($folder)
-	{
-		$path = $folder . '/body.php';
-		return file_get_contents($path);
 	}
 }

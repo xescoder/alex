@@ -92,7 +92,7 @@ class Trainer
 
 		$number = 1;
 		$result = [];
-		foreach ($trainees as $traineeFolder => $est) {
+		foreach ($trainees as $traineeFolder) {
 			$path = $this->config->bestFolder . '/' . $number . '.php';
 			copy($traineeFolder . '/body.php', $path);
 			$result[] = $path;
@@ -141,9 +141,30 @@ class Trainer
 
 	public function roulette($trainees, $max_count)
 	{
+		if (! count($trainees)) {
+			return [];
+		}
+
 		$sum = 0;
 		foreach ($trainees as $est) {
 			$sum += $est;
+		}
+
+		if ($sum == 0) {
+			$result = [];
+			$count  = 0;
+			$max    = count($trainees) > $max_count ? $max_count : count($trainees);
+
+			foreach ($trainees as $folder => $est) {
+				$result[] = $folder;
+
+				$count ++;
+				if ($count > $max) {
+					break;
+				}
+			}
+
+			return $result;
 		}
 
 		$next = 0;
@@ -168,38 +189,41 @@ class Trainer
 	}
 
 	/**
-	 * @param string   $operationName
 	 * @param mixed    $args
 	 * @param callable $estimate
 	 */
-	public function train($operationName, $args, Closure $estimate)
+	public function train($args, Closure $estimate)
 	{
-		$first     = TRUE;
-		$max_count = 10;
-		$best      = [];
+		$trainingCycles        = $this->config->trainingCycles;
+		$countInBestFolder     = $this->config->countInBestFolder;
+		$countInTrainingFolder = $this->config->countInTrainingFolder;
 
-		for ($i = 0; $i < $this->config->trainingCycles; $i ++) {
+		$trainingFolder = $this->config->trainingFolder;
+		$mutate         = $this->config->mutate;
+
+		$best      = [];
+		$bestIndex = 0;
+
+		$trainee = new Trainee($args);
+
+		for ($i = 0; $i < $trainingCycles; $i ++) {
 			$this->prepareTrainingRoom();
 
-			for ($j = 0; $j < $max_count; $j ++) {
-				$trainee = new Trainee($args);
-				if ($first) {
-					for ($k = 0; $k < 5; $k ++) {
-						$trainee->create();
-					}
+			for ($j = 0; $j < $countInTrainingFolder; $j ++) {
+				if (count($best) > 0) {
+					$trainee->inherit($best[$bestIndex]);
+
+					$bestIndex ++;
+					$bestIndex = $bestIndex < count($best) ? $bestIndex : 0;
 				}
-				else {
-					for ($k = 0; $k < 5; $k ++) {
-						$trainee->inherit($best[$j], $estimate);
-					}
-				}
-				$trainee->train($this->config->trainingFolder);
+
+				$trainee->train($trainingFolder, $mutate);
 			}
 
 			sleep($this->config->maxTrainingTime);
 
 			$result = $this->getResults($estimate);
-			$result = $this->roulette($result, $max_count);
+			$result = $this->roulette($result, $countInBestFolder);
 
 			$best = $this->copyInBest($result);
 		}
