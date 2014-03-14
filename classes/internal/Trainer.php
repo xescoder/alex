@@ -54,6 +54,11 @@ class Trainer
 		$pdo->query($query);
 	}
 
+	/**
+	 * @param string $dir
+	 * @param bool   $withRoot
+	 * @return bool
+	 */
 	private function deleteDir($dir, $withRoot = TRUE)
 	{
 		if (! is_dir($dir) || is_link($dir)) {
@@ -85,7 +90,11 @@ class Trainer
 		$this->deleteDir($this->config->trainingFolder, FALSE);
 	}
 
-	public function copyInBest($trainees)
+	/**
+	 * @param array $trainees
+	 * @return array
+	 */
+	private function copyInBest($trainees)
 	{
 		$this->deleteDir($this->config->bestFolder, FALSE);
 
@@ -101,7 +110,7 @@ class Trainer
 		return $result;
 	}
 
-	public function prepareTrainingRoom()
+	private function prepareTrainingRoom()
 	{
 		$this->clearResults();
 		$this->clearTrainingRoom();
@@ -113,7 +122,7 @@ class Trainer
 	/**
 	 * @return string[]
 	 */
-	public function getSurvivors()
+	private function getSurvivors()
 	{
 		$table = $this->config->trainingResultTable;
 		$pdo   = $this->getPDO();
@@ -126,10 +135,9 @@ class Trainer
 
 	/**
 	 * @param callable $estimate
-	 *
 	 * @return array
 	 */
-	public function getResults(Closure $estimate)
+	private function getResults(Closure $estimate)
 	{
 		$survivors = $this->getSurvivors();
 
@@ -143,7 +151,12 @@ class Trainer
 		return $result;
 	}
 
-	public function roulette($trainees, $max_count)
+	/**
+	 * @param array $trainees
+	 * @param int   $max_count
+	 * @return array
+	 */
+	private function roulette($trainees, $max_count)
 	{
 		if (! count($trainees)) {
 			return [];
