@@ -12,8 +12,10 @@ class AlexMutation
 	 */
 	public static function init()
 	{
-		if (is_null(self::$alexMutation)) {
-			self::$alexMutation = new self();
+		$class = get_called_class();
+
+		if (!(self::$alexMutation instanceof $class)) {
+			self::$alexMutation = new $class();
 		}
 
 		return self::$alexMutation;
