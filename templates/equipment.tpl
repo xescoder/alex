@@ -7,25 +7,28 @@ define('DB_PASS', '{$dbPass}');
 
 define('TABLE_NAME', '{$trainingResultTable}');
 
+ini_set('max_execution_time', '{$maxExecutionTime}');
+ini_set('memory_limit', '{$memoryLimit}');
+
 /**
- * @param string $functionName
- * @param string $args
- * @param Closure $function
- * @param string $folder
+ * @param string   $folder
+ * @param string   $args
+ * @param callable $function
  */
-function execute($args, $function, $folder)
+function execute($folder, $args, Closure $function)
 {
-    $args = unserialize($args);
-
-	$result = $function($args);
-	$result = serialize($result);
-
 	try {
-		$db = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS);
-		$query =  "INSERT INTO `" . TABLE_NAME . "` (`folder`, `result`)
+		$args = unserialize($args);
+
+		$result = $function($args);
+		$result = serialize($result);
+
+		$pdo   = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS);
+		$query = "INSERT INTO `" . TABLE_NAME . "` (`folder`, `result`)
         VALUES ('$folder', '$result');";
-		$db->query($query);
-	} catch (Exception $e) {
+		$pdo->query($query);
+	}
+	catch (Exception $e) {
 		die();
 	}
 }

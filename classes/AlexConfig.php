@@ -17,6 +17,7 @@
  *
  * @property int      $trainingCycles
  * @property int      $maxTrainingTime
+ * @property int      $maxTrainingMemory
  *
  * @property callable $mutate
  */
@@ -36,6 +37,7 @@ class AlexConfig
 
 	private $trainingCycles;
 	private $maxTrainingTime;
+	private $maxTrainingMemory;
 
 	private $mutate;
 
@@ -53,8 +55,9 @@ class AlexConfig
 		$this->countInBestFolder     = 10;
 		$this->countInTrainingFolder = 50;
 
-		$this->trainingCycles  = 10;
-		$this->maxTrainingTime = 1;
+		$this->trainingCycles    = 10;
+		$this->maxTrainingTime   = 1;
+		$this->maxTrainingMemory = 1024;
 
 		$this->mutate = function ($source) {
 			return AlexMutation::init()->mutate($source);

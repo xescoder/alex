@@ -33,6 +33,9 @@ class Equipment
 
 		$code = str_replace('{$trainingResultTable}', $this->config->trainingResultTable, $code);
 
+		$code = str_replace('{$maxExecutionTime}', $this->config->maxTrainingTime, $code);
+		$code = str_replace('{$memoryLimit}', $this->config->maxTrainingMemory, $code);
+
 		$f = fopen($this->config->trainingFolder . '/equipment.php', 'w');
 		fwrite($f, $code);
 		fclose($f);
