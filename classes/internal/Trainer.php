@@ -148,6 +148,8 @@ class Trainer
 			});
 		}
 
+		arsort($result);
+
 		return $result;
 	}
 
@@ -206,10 +208,31 @@ class Trainer
 	}
 
 	/**
+	 * @param string $functionName
+	 * @param string $folder
+	 */
+	private function createFunction($functionName, $folder)
+	{
+		$functionBody = file_get_contents($folder . '/body.php');
+		$functionBody = preg_replace('/\<\?php\s/', '', $functionBody);
+		$functionBody = preg_replace('/(\n)(.*)/', '$1	$2', $functionBody);
+
+		$function = file_get_contents(__DIR__ . '/../../templates/function.tpl');
+
+		$function = str_replace('{$functionName}', $functionName, $function);
+		$function = str_replace('{$functionBody}', $functionBody, $function);
+
+		$f = fopen($this->config->functionsFolder . '/' . $functionName . '.php', 'w');
+		fwrite($f, $function);
+		fclose($f);
+	}
+
+	/**
+	 * @param string   $functionName
 	 * @param mixed    $args
 	 * @param callable $estimate
 	 */
-	public function train($args, Closure $estimate)
+	public function train($functionName, $args, Closure $estimate)
 	{
 		$trainingCycles        = $this->config->trainingCycles;
 		$countInBestFolder     = $this->config->countInBestFolder;
@@ -220,6 +243,8 @@ class Trainer
 
 		$best      = [];
 		$bestIndex = 0;
+
+		$superior = NULL;
 
 		$trainee = new Trainee($args);
 
@@ -240,9 +265,18 @@ class Trainer
 			sleep($this->config->maxTrainingTime);
 
 			$result = $this->getResults($estimate);
-			$result = $this->roulette($result, $countInBestFolder);
 
-			$best = $this->copyInBest($result);
+			foreach ($result as $folder => $est) {
+				$superior = $folder;
+				break;
+			}
+
+			$result = $this->roulette($result, $countInBestFolder);
+			$best   = $this->copyInBest($result);
+		}
+
+		if ($superior) {
+			$this->createFunction($functionName, $superior);
 		}
 	}
 

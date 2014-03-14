@@ -12,6 +12,8 @@
  *
  * @property string   $bestFolder
  * @property string   $trainingFolder
+ * @property string   $functionsFolder
+ *
  * @property int      $countInBestFolder
  * @property int      $countInTrainingFolder
  *
@@ -32,6 +34,8 @@ class AlexConfig
 
 	private $bestFolder;
 	private $trainingFolder;
+	private $functionsFolder;
+
 	private $countInBestFolder;
 	private $countInTrainingFolder;
 
@@ -50,12 +54,14 @@ class AlexConfig
 
 		$this->trainingResultTable = 'training_result';
 
-		$this->bestFolder            = __DIR__ . '/../best';
-		$this->trainingFolder        = __DIR__ . '/../training_room';
+		$this->bestFolder      = __DIR__ . '/../best';
+		$this->trainingFolder  = __DIR__ . '/../training_room';
+		$this->functionsFolder = __DIR__ . '/../functions';
+
 		$this->countInBestFolder     = 10;
 		$this->countInTrainingFolder = 50;
 
-		$this->trainingCycles    = 10;
+		$this->trainingCycles    = 1;
 		$this->maxTrainingTime   = 1;
 		$this->maxTrainingMemory = 1024;
 
