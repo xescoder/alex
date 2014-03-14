@@ -9,3 +9,6 @@ $alex->train('test', 123, function ($func) {
 	if ($func(3) != 3) return 2;
 	return 3;
 });
+
+var_dump($alex->execute('test', 1));
+var_dump($alex->test(1));

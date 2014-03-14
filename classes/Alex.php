@@ -17,7 +17,7 @@ class Alex
 	 */
 	public function __construct($config = NULL)
 	{
-		$config = ($config instanceof AlexConfig) ? $config : new AlexConfig();
+		$config        = ($config instanceof AlexConfig) ? $config : new AlexConfig();
 		$this->trainer = new Trainer($config);
 	}
 
@@ -34,9 +34,19 @@ class Alex
 	/**
 	 * @param string $functionName
 	 * @param mixed  $args
+	 * @throws BadFunctionCallException
 	 */
 	public function execute($functionName, $args)
 	{
+		$file = $this->trainer->config->functionsFolder . '/' . $functionName . '.php';
+
+		if (is_file($file)) {
+			include_once $file;
+			return $functionName($args);
+		}
+		else {
+			throw new BadFunctionCallException('Function ' . $functionName . ' don`t found');
+		}
 	}
 
 	public function __get($property)
@@ -54,5 +64,10 @@ class Alex
 				$this->trainer->config = $value;
 				break;
 		}
+	}
+
+	public function __call($name, $arguments)
+	{
+		return $this->execute($name, $arguments[0]);
 	}
 } 
