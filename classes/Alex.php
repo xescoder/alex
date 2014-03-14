@@ -1,5 +1,7 @@
 <?php
 
+use \Alex\Internal\Trainer;
+
 /**
  * Class Alex
  *
@@ -7,28 +9,33 @@
  */
 class Alex
 {
-	/** @var  AlexConfig */
-	private $config;
+	/** @var  Trainer */
+	private $trainer;
 
-	public function __construct()
+	/**
+	 * @param AlexConfig|null $config
+	 */
+	public function __construct($config = NULL)
 	{
-		$this->config = new AlexConfig();
+		$config = ($config instanceof AlexConfig) ? $config : new AlexConfig();
+		$this->trainer = new Trainer($config);
 	}
 
 	/**
-	 * @param string  $operationName
-	 * @param array   $args
+	 * @param string  $functionName
+	 * @param mixed   $args
 	 * @param Closure $estimate
 	 */
-	public function train($operationName, $args, $estimate)
+	public function train($functionName, $args, $estimate)
 	{
+		$this->trainer->train($functionName, $args, $estimate);
 	}
 
 	/**
-	 * @param string $operationName
-	 * @param array  $args
+	 * @param string $functionName
+	 * @param mixed  $args
 	 */
-	public function execute($operationName, $args)
+	public function execute($functionName, $args)
 	{
 	}
 
@@ -36,7 +43,7 @@ class Alex
 	{
 		switch ($property) {
 			case 'config':
-				return $this->config;
+				return $this->trainer->config;
 		}
 	}
 
@@ -44,7 +51,7 @@ class Alex
 	{
 		switch ($property) {
 			case 'config':
-				$this->config = $value;
+				$this->trainer->config = $value;
 				break;
 		}
 	}
