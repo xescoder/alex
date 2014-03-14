@@ -49,8 +49,7 @@ class Trainer
 		$pdo->query($query);
 
 		$query = "CREATE TABLE `" . $table . "` (
-				  `folder` char(255) NOT NULL DEFAULT '',
-				  `result` varchar(100) NOT NULL DEFAULT ''
+				  `folder` char(255) NOT NULL DEFAULT ''
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 		$pdo->query($query);
 	}
@@ -112,29 +111,34 @@ class Trainer
 	}
 
 	/**
+	 * @return string[]
+	 */
+	public function getSurvivors()
+	{
+		$table = $this->config->trainingResultTable;
+		$pdo   = $this->getPDO();
+
+		$query = 'SELECT `folder` FROM `' . $table . '`;';
+
+		$cursor = $pdo->query($query);
+		return $cursor->fetchAll(PDO::FETCH_COLUMN, 0);
+	}
+
+	/**
 	 * @param callable $estimate
 	 *
 	 * @return array
 	 */
 	public function getResults(Closure $estimate)
 	{
-		$table = $this->config->trainingResultTable;
-		$pdo   = $this->getPDO();
-
-		$query = 'SELECT * FROM `' . $table . '`;';
-
-		$cursor = $pdo->query($query);
-		$cursor->setFetchMode(PDO::FETCH_ASSOC);
+		$survivors = $this->getSurvivors();
 
 		$result = [];
-		while ($row = $cursor->fetch()) {
-			$res = unserialize($row['result']);
-			$res = $estimate($res);
-
-			$result[$row['folder']] = $res;
+		foreach ($survivors as $survivor) {
+			$result[$survivor] = $estimate(function ($args) use ($survivor) {
+				return include $survivor . '/body.php';
+			});
 		}
-
-		arsort($result);
 
 		return $result;
 	}

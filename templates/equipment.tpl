@@ -19,13 +19,11 @@ function execute($folder, $args, Closure $function)
 {
 	try {
 		$args = unserialize($args);
-
 		$result = $function($args);
-		$result = serialize($result);
 
 		$pdo   = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS);
-		$query = "INSERT INTO `" . TABLE_NAME . "` (`folder`, `result`)
-        VALUES ('$folder', '$result');";
+		$query = "INSERT INTO `" . TABLE_NAME . "` (`folder`)
+        VALUES ('" . $folder . "');";
 		$pdo->query($query);
 	}
 	catch (Exception $e) {
