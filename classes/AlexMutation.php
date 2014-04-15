@@ -87,7 +87,7 @@ class AlexMutation
 		$end   = $len + ($len / 2) + 1;
 		$count = ($len < 3) ? 3 : rand(0, 2);
 
-		if (($len < 3) || (rand(0, 1000) < 300)) {
+		if (($len < 3) || (rand(0, 1000) < 100)) {
 			for ($i = 0; $i < $count; $i ++) {
 				$index = rand($start, $end);
 
@@ -126,10 +126,17 @@ class AlexMutation
 			$operator = $this->getOperator();
 			$index    = rand($start, $end);
 
-			$lines[$index] = preg_replace_callback('/\{\$p[0-9]\}/', function () use ($vars) {
-				$index = rand(0, count($vars) - 1);
-				return $vars[$index];
-			}, $operator);
+			if (rand(0, 1000) < 100) {
+				if (isset($lines[$index])) {
+					unset($lines[$index]);
+				}
+			}
+			else {
+				$lines[$index] = preg_replace_callback('/\{\$p[0-9]\}/', function () use ($vars) {
+					$index = rand(0, count($vars) - 1);
+					return $vars[$index];
+				}, $operator);
+			}
 		}
 
 		foreach ($lines as $index => $line) {
