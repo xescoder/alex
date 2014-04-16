@@ -143,7 +143,7 @@ class Trainer
 
 		$result = [];
 		foreach ($survivors as $survivor) {
-			$result[$survivor] = $estimate(function ($args) use ($survivor) {
+			$result[$survivor] = $estimate(function ($a) use ($survivor) {
 				return include $survivor . '/body.php';
 			});
 		}

@@ -61,7 +61,7 @@ class AlexConfig
 		$this->countInBestFolder     = 10;
 		$this->countInTrainingFolder = 50;
 
-		$this->trainingCycles    = 1;
+		$this->trainingCycles    = 200;
 		$this->maxTrainingTime   = 1;
 		$this->maxTrainingMemory = 1024;
 

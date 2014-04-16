@@ -42,12 +42,32 @@
 {$p1} = pow({$p2}, {$p3});
 {$p1} = round({$p2});
 {$p1} = sqrt({$p2});
-if ({$p1}) {
-}
-while ({$p1}) {
-}
-for ({$p1} = 0; {$p1} < {$p2}; {$p1}++) {
-}
-continue;
-break;
 return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+return {$p1};
+

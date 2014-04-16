@@ -56,20 +56,17 @@ class AlexMutation
 
 	private function createVar()
 	{
-		static $tokens = 'qwertyuioplkjhgfdsazxcvbnm';
+		static $tokens = 'abcdefghijklmn';
 		$len = strlen($tokens) - 1;
 
 		$var = '$' . substr($tokens, rand(0, $len), 1);
 
-		if (rand(0, 1000) < 300) {
-			$var .= substr($tokens, rand(0, $len), 1);
-		}
-
-		if (rand(0, 1000) < 200) {
-			$var .= substr($tokens, rand(0, $len), 1);
-		}
-
 		return $var;
+	}
+
+	private function createValue()
+	{
+		return rand(-1000, 1000);
 	}
 
 	private function getVars($source)
@@ -85,9 +82,9 @@ class AlexMutation
 		$len   = count($vars);
 		$start = - ($len / 2);
 		$end   = $len + ($len / 2) + 1;
-		$count = ($len < 3) ? 3 : rand(0, 2);
+		$count = ($len < 1) ? 1 : rand(0, 2);
 
-		if (($len < 3) || (rand(0, 1000) < 50)) {
+		if (($len < 1) || (rand(0, 1000) < 50)) {
 			for ($i = 0; $i < $count; $i ++) {
 				$index = rand($start, $end);
 
@@ -112,11 +109,21 @@ class AlexMutation
 	 */
 	public function mutate($source)
 	{
+		if (rand(0, 1000) > 700) {
+			return $source;
+		}
+
 		$source = trim($source);
+		$source = preg_replace('/\<\?php\s/', '', $source);
 
 		$vars  = $this->getVars($source);
 		$lines = explode(PHP_EOL, $source);
 		$len   = count($lines);
+
+		if (count($vars) == 0) {
+			$source = '<?php' . PHP_EOL . $source;
+			return $source;
+		}
 
 		$count = rand(0, ($len / 10) + 3);
 		$start = - ($len / 2);
@@ -133,8 +140,13 @@ class AlexMutation
 			}
 			else {
 				$lines[$index] = preg_replace_callback('/\{\$p[0-9]\}/', function () use ($vars) {
-					$index = rand(0, count($vars) - 1);
-					return $vars[$index];
+					if (rand(0, 1000) < 50) {
+						return $this->createValue();
+					}
+					else {
+						$index = rand(0, count($vars) - 1);
+						return $vars[$index];
+					}
 				}, $operator);
 			}
 		}
@@ -151,7 +163,9 @@ class AlexMutation
 		}
 
 		ksort($lines);
+
 		$source = implode(PHP_EOL, $lines);
+		$source = '<?php' . PHP_EOL . $source;
 
 		return $source;
 	}

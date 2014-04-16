@@ -1,6 +1,6 @@
 <?php
 
-function {$functionName} ($args)
+function {$functionName} ($a)
 {
 	{$functionBody}
 }
