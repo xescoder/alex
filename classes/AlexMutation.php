@@ -87,7 +87,7 @@ class AlexMutation
 		$end   = $len + ($len / 2) + 1;
 		$count = ($len < 3) ? 3 : rand(0, 2);
 
-		if (($len < 3) || (rand(0, 1000) < 100)) {
+		if (($len < 3) || (rand(0, 1000) < 50)) {
 			for ($i = 0; $i < $count; $i ++) {
 				$index = rand($start, $end);
 
